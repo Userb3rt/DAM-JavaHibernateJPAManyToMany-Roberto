@@ -2,8 +2,10 @@ package com.project;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,8 +25,12 @@ public class Autor {
     @Column(name = "nom")
     private String nom;
 
-    @OneToMany(mappedBy = "autorId")
-    private Set<Llibre> llibres;
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "autor")
+    private Set<Llibre> items;
+
+    public Autor() {
+        super();
+    }
 
     public Autor(String nom) {
         super();
@@ -40,15 +46,27 @@ public class Autor {
     }
 
     public Set<Llibre> getLlibres() {
-        return llibres;
+        return items;
     }
 
     public void setLlibres(Set<Llibre> llibres) {
-        this.llibres = llibres;
+        this.items = llibres;
     }
 
     public long getAutorId() {
         return autorId;
     }
 
+    public String getlistllibres(){
+        String listllibres = "[";
+        for (Llibre llibre : items) {
+            listllibres+= llibre.getLlibreId()+", "+llibre.getEditorial()+", "+llibre.getNom()+" | ";
+        }
+        return listllibres;
+    }
+
+    @Override
+    public String toString() {
+        return getAutorId()+": "+getNom()+", Items: "+getlistllibres();
+    }
 }

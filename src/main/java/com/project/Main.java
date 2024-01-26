@@ -188,5 +188,8 @@ public class Main {
                 System.out.println(Manager.collectionToString(Autor.class, colAutors));
 
                 Manager.close();
+
+                File f = new File("data/database.db");
+                f.delete();
         }
 }

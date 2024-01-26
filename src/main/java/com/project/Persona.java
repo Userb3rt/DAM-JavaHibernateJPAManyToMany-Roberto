@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,11 +34,15 @@ public class Persona {
     @Column(name = "telefon")
     private String telefon;
     
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "Persona_llibre", joinColumns = {
             @JoinColumn(referencedColumnName = "personaId") }, inverseJoinColumns = {
                     @JoinColumn(referencedColumnName = "llibreId") })
     private Set<Llibre> llibres;
+
+    public Persona() {
+        super();
+    }
 
     public Persona(String dni, String nom, String telefon) {
         super();
@@ -80,6 +85,19 @@ public class Persona {
 
     public void setLlibres(Set<Llibre> llibres) {
         this.llibres = llibres;
+    }
+
+    public String getlistllibres(){
+        String listllibres = "[";
+        for (Llibre llibre : llibres) {
+            listllibres+= llibre.getLlibreId()+", "+llibre.getEditorial()+", "+llibre.getNom()+" | ";
+        }
+        return listllibres;
+    }
+
+    @Override
+    public String toString() {
+        return getPersonaId()+": "+ getNom()+", "+getTelefon()+", Llibres: "+ getlistllibres();
     }
 
 }

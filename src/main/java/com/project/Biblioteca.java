@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,11 +30,15 @@ public class Biblioteca {
     @Column(name = "ciutat")
     private String ciutat;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "Biblioteca_Llibres", joinColumns = {
             @JoinColumn(referencedColumnName = "bibliotecaId") }, inverseJoinColumns = {
                     @JoinColumn(referencedColumnName = "llibreId") })
     private Set<Llibre> llibres;
+
+    public Biblioteca() {
+        super();
+    }
 
     public Biblioteca(String nom, String ciutat) {
         super();
@@ -71,6 +76,19 @@ public class Biblioteca {
 
     public void setLlibres(Set<Llibre> llibres) {
         this.llibres = llibres;
+    }
+
+    public String getllibreslist() {
+        String list = "[";
+        for (Llibre llibre : llibres) {
+            list += llibre.getLlibreId() + ", " + llibre.getEditorial() + ", " + llibre.getNom() + " | ";
+        }
+        return list;
+    }
+
+    @Override
+    public String toString() {
+        return getBibliotecaId() + ": " + getNom() + ", " + getCiutat() + ", Llibres: " + getllibreslist();
     }
 
 }

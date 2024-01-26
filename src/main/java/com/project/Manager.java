@@ -175,12 +175,12 @@ public class Manager {
         }
     }
 
-    public static void updateAutor(long personaId, String nom, Set<Llibre> llibres) {
+    public static void updateAutor(long autorId, String nom, Set<Llibre> llibres) {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            Autor obj = (Autor) session.get(Autor.class, personaId);
+            Autor obj = (Autor) session.get(Autor.class, autorId);
             obj.setNom(nom);
             obj.setLlibres(llibres);
             session.update(obj);
